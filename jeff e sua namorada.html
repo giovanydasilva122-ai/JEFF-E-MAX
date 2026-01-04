@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Jeff</title>
+
+<style>
+body{
+    background-color: rgb(36,36,36);
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card{
+    width: 15em;
+    height: 25em;
+    border-radius: 12px;
+    box-shadow: 5px 10px 15px #000;
+    position: relative;
+    overflow: hidden;
+
+    background-image: url("copia de jeff.jpeg");
+    background-size: cover;
+    background-position: center;
+
+    transition: transform 300ms ease;
+    transform-style: preserve-3d;
+}
+
+.card::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    z-index: 0;
+}
+
+.card *{
+    position: relative;
+    z-index: 1;
+}
+
+.chip{
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    width: 55px;
+}
+
+.brand{
+    position: absolute;
+    top: 25px;
+    right: 20px;
+    width: 55px;
+}
+
+.name{
+    position: absolute;
+    bottom: 22px;
+    left: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+    <img src="chip.png" class="chip" alt="chip">
+    <img src="mastercard_logo.png" class="brand" alt="bandeira">
+    <div class="name">Jeff</div>
+</div>
+
+<script>
+const card = document.getElementById("card");
+
+/* ===== DESKTOP ===== */
+card.addEventListener("mousemove", e => {
+    applyEffect(e.clientX, e.clientY);
+});
+
+card.addEventListener("mouseleave", resetCard);
+
+/* ===== MOBILE ===== */
+card.addEventListener("touchstart", e => {
+    const touch = e.touches[0];
+    applyEffect(touch.clientX, touch.clientY);
+}, { passive: true });
+
+card.addEventListener("touchmove", e => {
+    const touch = e.touches[0];
+    applyEffect(touch.clientX, touch.clientY);
+}, { passive: true });
+
+card.addEventListener("touchend", resetCard);
+
+/* ===== FUNÇÕES ===== */
+
+function applyEffect(clientX, clientY) {
+    const rect = card.getBoundingClientRect();
+
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * 10;
+    const rotateY = ((x - centerX) / centerX) * -10;
+
+    card.style.transform = `
+        perspective(600px)
+        rotateX(${rotateX}deg)
+        rotateY(${rotateY}deg)
+        scale(1.03)
+    `;
+}
+
+function resetCard() {
+    card.style.transform = `
+        perspective(600px)
+        rotateX(0deg)
+        rotateY(0deg)
+        scale(1)
+    `;
+}
+</script>
+
+</body>
+</html>
